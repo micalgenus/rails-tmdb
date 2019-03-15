@@ -6,5 +6,7 @@ RUN ["chmod", "+x", "/entrypoint.sh"]
 WORKDIR /usr/local/share/rails-tmdb
 COPY . ./
 
+EXPOSE 3000
+
 ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["./bin/rails", "server"]
