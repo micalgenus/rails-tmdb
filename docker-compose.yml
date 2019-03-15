@@ -1,0 +1,25 @@
+version: "3"
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+    links:
+      - "mysql:mysql"
+    networks:
+      - rails-tmdb
+
+  mysql:
+    image: "mysql:5.5"
+    environment:
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=rails_tmdb
+    networks:
+      - rails-tmdb
+
+networks:
+  rails-tmdb:
