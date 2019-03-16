@@ -10,6 +10,9 @@ services:
       - "mysql:mysql"
     networks:
       - rails-tmdb
+    volumes:
+      - $PWD:/usr/local/share/rails-tmdb
+      - bundle:/usr/local/bundle
 
   mysql:
     image: "mysql:5.5"
@@ -23,3 +26,6 @@ services:
 
 networks:
   rails-tmdb:
+
+volumes:
+  bundle:

@@ -9,4 +9,5 @@ COPY . ./
 EXPOSE 3000
 
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["development"]
 # CMD ["./bin/rails", "server"]
