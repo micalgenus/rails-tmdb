@@ -1,15 +1,18 @@
-version: "3"
+version: "2.1"
 services:
   web:
     build: .
     ports:
       - "3000:3000"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     links:
       - "mysql:mysql"
     networks:
       - rails-tmdb
+    tmpfs:
+      - /usr/local/share/rails-tmdb/tmp/pids
 
   mysql:
     image: "mysql:5.5"
@@ -20,6 +23,11 @@ services:
       - MYSQL_DATABASE=rails_tmdb
     networks:
       - rails-tmdb
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 2s
+      timeout: 20s
+      retries: 10
 
 networks:
   rails-tmdb:

@@ -1,0 +1,2 @@
+class MovieCrew < ApplicationRecord
+end

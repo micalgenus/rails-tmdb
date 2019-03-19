@@ -1,0 +1,2 @@
+class CompanyParent < ApplicationRecord
+end

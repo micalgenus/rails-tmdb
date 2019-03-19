@@ -1,18 +1,24 @@
-version: "3"
+version: "2.1"
 services:
   web:
     build: .
     ports:
       - "3000:3000"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     links:
       - "mysql:mysql"
+      - "redis:redis"
     networks:
       - rails-tmdb
     volumes:
       - $PWD:/usr/local/share/rails-tmdb
       - bundle:/usr/local/bundle
+    tmpfs:
+      - /usr/local/share/rails-tmdb/tmp/pids
 
   mysql:
     image: "mysql:5.5"
@@ -23,6 +29,23 @@ services:
       - MYSQL_DATABASE=rails_tmdb
     networks:
       - rails-tmdb
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: 'mysql -umysql -pmysql -e"SHOW DATABASES;"'
+      interval: 2s
+      timeout: 20s
+      retries: 10
+
+  redis:
+    image: "redis"
+    networks:
+      - rails-tmdb
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 20s
+      retries: 10
 
 networks:
   rails-tmdb:

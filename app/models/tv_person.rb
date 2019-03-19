@@ -1,0 +1,2 @@
+class TvPerson < ApplicationRecord
+end
