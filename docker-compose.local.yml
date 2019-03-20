@@ -18,7 +18,7 @@ services:
       - $PWD:/usr/local/share/rails-tmdb
       - bundle:/usr/local/bundle
     tmpfs:
-      - /usr/local/share/rails-tmdb/tmp/pids
+      - /usr/local/share/rails-tmdb/tmp
 
   mysql:
     image: "mysql:5.5"
