@@ -14,7 +14,7 @@ class AddDetailToTvs < ActiveRecord::Migration[5.2]
     add_column :tvs, :popularity, :float
     add_column :tvs, :poster_path, :string
     add_column :tvs, :status, :string
-    add_column :tvs, :type, :string
+    add_column :tvs, :tv_type, :string
     add_column :tvs, :vote_average, :float
     add_column :tvs, :vote_count, :decimal
   end

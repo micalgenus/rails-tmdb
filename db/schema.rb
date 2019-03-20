@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_20_185234) do
+ActiveRecord::Schema.define(version: 2019_03_20_215957) do
 
   create_table "companies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -233,6 +233,8 @@ ActiveRecord::Schema.define(version: 2019_03_20_185234) do
     t.string "still_path"
     t.float "vote_average"
     t.decimal "vote_count", precision: 10
+    t.bigint "tv_id"
+    t.index ["tv_id"], name: "index_tv_episodes_on_tv_id"
   end
 
   create_table "tv_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -282,15 +284,6 @@ ActiveRecord::Schema.define(version: 2019_03_20_185234) do
     t.index ["tv_season_id"], name: "index_tv_season_crews_on_tv_season_id"
   end
 
-  create_table "tv_season_episodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "tv_season_id"
-    t.bigint "tv_episode_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["tv_episode_id"], name: "index_tv_season_episodes_on_tv_episode_id"
-    t.index ["tv_season_id"], name: "index_tv_season_episodes_on_tv_season_id"
-  end
-
   create_table "tv_seasons", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -300,15 +293,8 @@ ActiveRecord::Schema.define(version: 2019_03_20_185234) do
     t.text "overview"
     t.string "poster_path"
     t.decimal "season_number", precision: 10
-  end
-
-  create_table "tv_with_seasons", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_id"
-    t.bigint "tv_season_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["tv_id"], name: "index_tv_with_seasons_on_tv_id"
-    t.index ["tv_season_id"], name: "index_tv_with_seasons_on_tv_season_id"
+    t.index ["tv_id"], name: "index_tv_seasons_on_tv_id"
   end
 
   create_table "tvs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -328,7 +314,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_185234) do
     t.float "popularity"
     t.string "poster_path"
     t.string "status"
-    t.string "type"
+    t.string "tv_type"
     t.float "vote_average"
     t.decimal "vote_count", precision: 10
     t.string "languages"
@@ -360,6 +346,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_185234) do
   add_foreign_key "tv_episode_crews", "tv_episodes"
   add_foreign_key "tv_episode_guests", "people"
   add_foreign_key "tv_episode_guests", "tv_episodes"
+  add_foreign_key "tv_episodes", "tvs"
   add_foreign_key "tv_genres", "genres"
   add_foreign_key "tv_genres", "tvs"
   add_foreign_key "tv_last_episode_to_airs", "tv_episodes"
@@ -370,8 +357,5 @@ ActiveRecord::Schema.define(version: 2019_03_20_185234) do
   add_foreign_key "tv_season_casts", "tv_seasons"
   add_foreign_key "tv_season_crews", "people"
   add_foreign_key "tv_season_crews", "tv_seasons"
-  add_foreign_key "tv_season_episodes", "tv_episodes"
-  add_foreign_key "tv_season_episodes", "tv_seasons"
-  add_foreign_key "tv_with_seasons", "tv_seasons"
-  add_foreign_key "tv_with_seasons", "tvs"
+  add_foreign_key "tv_seasons", "tvs"
 end
