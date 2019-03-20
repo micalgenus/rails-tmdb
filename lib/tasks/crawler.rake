@@ -84,7 +84,7 @@ namespace :crawler do
       end
     end
 
-    people = getMoviePeoples(movie_id)
+    people = getMoviePeople(movie_id)
     if not people["cast"].blank?
       # Update person
       for cast in people["cast"]
@@ -104,6 +104,171 @@ namespace :crawler do
       # Update Relationship
       for crew in people["crew"]
         addRelationMovieCrew(movie_id, crew["id"])
+      end
+    end
+  end
+
+  def crwalingTvs(tv_list)
+    for tv in tv_list
+      crwalingTv(tv["id"])
+    end
+  end
+
+  def crwalingTv(tv_id)
+    tv = updateTv(tv_id)
+
+    if not tv["created_by"].blank?
+      # Update company
+      for person in tv["created_by"]
+        updatePerson(person["id"])
+      end
+      # Update Relationship
+      for person in tv["created_by"]
+        addRelationTvCrew(tv_id, person["id"])
+      end
+    end
+
+    if not tv["episode_run_time"].blank?
+      # Update company
+      for run_time in tv["episode_run_time"]
+        updateTvRuntime(tv_id, run_time)
+      end
+    end
+
+    if not tv["genres"].blank?
+      # Update genre
+      for genre in tv["genres"]
+        updateGenre("tv", genre["id"], genre["name"])
+      end
+      # Update Relationship
+      for genre in tv["genres"]
+        addRelationTvGenre(tv_id, genre["id"])
+      end
+    end
+
+    if not tv["networks"].blank?
+      # Update genre
+      for network in tv["networks"]
+        updateNetwork(network["id"])
+      end
+      # Update Relationship
+      for network in tv["networks"]
+        addRelationTvNetwork(tv_id, network["id"])
+      end
+    end
+
+    if not tv["production_companies"].blank?
+      # Update company
+      for company in tv["production_companies"]
+        updateCompany(company["id"])
+      end
+      # Update Relationship
+      for company in tv["production_companies"]
+        addRelationTvCompany(tv_id, company["id"])
+      end
+    end
+
+    if not tv["seasons"].blank?
+      # Update season
+      for season in tv["seasons"]
+        crawlingSeason(tv_id, season["season_number"])
+      end
+    end
+
+    people = getTvPeople(tv_id)
+    if not people["cast"].blank?
+      # Update person
+      for cast in people["cast"]
+        updatePerson(cast["id"])
+      end
+      # Update Relationship
+      for cast in people["cast"]
+        addRelationTvCast(tv_id, cast["id"], cast["character"])
+      end
+    end
+    
+    if not people["crew"].blank?
+      # Update person
+      for crew in people["crew"]
+        updatePerson(crew["id"])
+      end
+      # Update Relationship
+      for crew in people["crew"]
+        addRelationTvCrew(tv_id, crew["id"])
+      end
+    end
+  end
+
+  def crawlingSeason(tv_id, season_id)
+    season = updateSeason(tv_id, season_id)
+    id = season["id"].blank? ? season.id : season["id"]
+
+    if not season["episodes"].blank?
+      # Update episode
+      for episode in season["episodes"]
+        crawlingEpisode(tv_id, season_id, episode["episode_number"])
+      end
+    end
+    
+    people = getSeasonPeople(tv_id, season_id)
+    if not people["cast"].blank?
+      # Update person
+      for cast in people["cast"]
+        updatePerson(cast["id"])
+      end
+      # Update Relationship
+      for cast in people["cast"]
+        addRelationSeasonCast(id, cast["id"], cast["character"])
+      end
+    end
+    
+    if not people["crew"].blank?
+      # Update person
+      for crew in people["crew"]
+        updatePerson(crew["id"])
+      end
+      # Update Relationship
+      for crew in people["crew"]
+        addRelationSeasonCrew(id, crew["id"])
+      end
+    end
+  end
+
+  def crawlingEpisode(tv_id, season_id, episode_id)
+    episode = updateEpisode(tv_id, season_id, episode_id)
+    id = episode["id"].blank? ? episode.id : episode["id"]
+    
+    people = getEpisodePeople(tv_id, season_id, episode_id)
+    if not people["cast"].blank?
+      # Update person
+      for cast in people["cast"]
+        updatePerson(cast["id"])
+      end
+      # Update Relationship
+      for cast in people["cast"]
+        addRelationEpisodeCast(id, cast["id"], cast["character"])
+      end
+    end
+    
+    if not people["crew"].blank?
+      # Update person
+      for crew in people["crew"]
+        updatePerson(crew["id"])
+      end
+      # Update Relationship
+      for crew in people["crew"]
+        addRelationEpisodeCrew(id, crew["id"])
+      end
+    end
+    
+    if not people["guest_stars"].blank?
+      # Update person
+      for guest in people["guest_stars"]
+        updatePerson(guest["id"])
+      end
+      # Update Relationship
+      for guest in people["guest_stars"]
+        addRelationEpisodeGuest(id, guest["id"], guest["character"])
       end
     end
   end
@@ -170,6 +335,94 @@ namespace :crawler do
     # todo: update?
   end
 
+  def addRelationTvCompany(tv, company)
+    r = TvCompany.where("tv_id = :tv and company_id = :company", { tv: tv, company: company }).take
+    if r.blank?
+      TvCompany.new(:tv_id => tv, :company_id => company).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationTvCrew(tv, crew)
+    r = TvCrew.where("tv_id = :tv and person_id = :crew", { tv: tv, crew: crew }).take
+    if r.blank?
+      TvCrew.new(:tv_id => tv, :person_id => crew).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationTvGenre(tv, genre)
+    r = TvGenre.where("tv_id = :tv and genre_id = :genre", { tv: tv, genre: genre }).take
+    if r.blank?
+      TvGenre.new(:tv_id => tv, :genre_id => genre).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationTvNetwork(tv, network)
+    r = TvNetwork.where("tv_id = :tv and network_id = :network", { tv: tv, network: network }).take
+    if r.blank?
+      TvNetwork.new(:tv_id => tv, :network_id => network).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationTvCast(tv, cast, character)
+    r = TvCast.where("tv_id = :tv and person_id = :cast", { tv: tv, cast: cast }).take
+    if r.blank?
+      TvCast.new(:tv_id => tv, :person_id => cast, :character => character).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationTvCrew(tv, crew)
+    r = TvCrew.where("tv_id = :tv and person_id = :crew", { tv: tv, crew: crew }).take
+    if r.blank?
+      TvCrew.new(:tv_id => tv, :person_id => crew).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationEpisodeCast(episode, cast, character)
+    r = TvEpisodeCast.where("tv_episode_id = :episode and person_id = :cast", { episode: episode, cast: cast }).take
+    if r.blank?
+      TvEpisodeCast.new(:tv_episode_id => episode, :person_id => cast, :character => character).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationEpisodeCrew(episode, crew)
+    r = TvEpisodeCrew.where("tv_episode_id = :episode and person_id = :crew", { episode: episode, crew: crew }).take
+    if r.blank?
+      TvEpisodeCrew.new(:tv_episode_id => episode, :person_id => crew).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationEpisodeGuest(episode, cast, character)
+    r = TvEpisodeGuest.where("tv_episode_id = :episode and person_id = :cast", { episode: episode, cast: cast }).take
+    if r.blank?
+      TvEpisodeGuest.new(:tv_episode_id => episode, :person_id => cast, :character => character).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationSeasonCast(season, cast, character)
+    r = TvSeasonCast.where("tv_season_id = :season and person_id = :cast", { season: season, cast: cast }).take
+    if r.blank?
+      TvSeasonCast.new(:tv_season_id => season, :person_id => cast, :character => character).save()
+    end
+    # todo: update?
+  end
+
+  def addRelationSeasonCrew(season, crew)
+    r = TvSeasonCrew.where("tv_season_id = :season and person_id = :crew", { season: season, crew: crew }).take
+    if r.blank?
+      TvSeasonCrew.new(:tv_season_id => season, :person_id => crew).save()
+    end
+    # todo: update?
+  end
+  
   ################################################################
   #                       Database Methods                       #
   ################################################################
@@ -281,6 +534,114 @@ namespace :crawler do
     # todo: update?
   end
 
+  def updateTv(id)
+    begin
+      Tv.find(id)
+      return tv = getTvDetails(id)
+      # todo: update tv?
+    rescue ActiveRecord::RecordNotFound
+      tv = getTvDetails(id)
+      Tv.new(
+        :backdrop_path => tv["backdrop_path"],
+        :first_air_date => tv["first_air_date"],
+        :homepage => tv["homepage"],
+        :id => tv["id"],
+        :in_production => tv["in_production"],
+        :last_air_date => tv["last_air_date"],
+        :name => tv["name"],
+        :languages => tv["languages"].join(","),
+        :number_of_episodes => tv["number_of_episodes"],
+        :number_of_seasons => tv["number_of_seasons"],
+        :original_name => tv["original_name"],
+        :original_language => tv["original_language"],
+        :overview => tv["overview"],
+        :popularity => tv["popularity"],
+        :poster_path => tv["poster_path"],
+        :status => tv["status"],
+        :tv_type => tv["type"],
+        :vote_average => tv["vote_average"],
+        :vote_count => tv["vote_count"]
+      ).save()
+      return tv
+    end
+  end
+
+  def updateTvRuntime(tv, runtime)
+    r = EpisodeRunTime.where("tv_id = :tv and run_time = :runtime", { tv: tv, runtime: runtime }).take
+    if r.blank?
+      EpisodeRunTime.new(:tv_id => tv, :run_time => runtime).save()
+    end
+  end
+
+  def updateNetwork(id)
+    begin
+      Network.find(id)
+      # todo: update network?
+    rescue ActiveRecord::RecordNotFound
+      network = getNetworkDetails(id)
+      Network.new(
+        :id => network["id"],
+        :headquarters => network["headquarters"],
+        :homepage => network["homepage"],
+        :name => network["name"],
+        :origin_country => network["origin_country"],
+      ).save()
+    end
+  end
+
+  def updateSeason(tv_id, season_id)
+    r = TvSeason.where("tv_id = :tv_id and season_number = :season_number", { tv_id: tv_id, season_number: season_id }).take
+    if r.blank?
+      season = getTvSeasonDetails(tv_id, season_id)
+      TvSeason.new(
+        :tv_id => tv_id,
+        :_id => season["_id"],
+        :air_date => season["air_date"],
+        :name => season["name"],
+        :overview => season["overview"],
+        :id => season["id"],
+        :poster_path => season["poster_path"],
+        :season_number => season["season_number"]
+      ).save()
+      return season
+    end
+
+    return r
+  end
+
+  def updateEpisode(tv_id, season_id, episode_id)
+    r = TvEpisode.where(
+      "tv_id = :tv_id and season_number = :season_number and episode_number = :episode_number",
+      { tv_id: tv_id, season_number: season_id, episode_number: episode_id }
+    ).take
+    if r.blank?
+      episode = getTvEpisodeDetails(tv_id, season_id, episode_id)
+      TvEpisode.new(
+        :tv_id => tv_id,
+        :air_date => episode["air_date"],
+        :episode_number => episode["episode_number"],
+        :name => episode["name"],
+        :overview => episode["overview"],
+        :id => episode["id"],
+        :production_code => episode["production_code"],
+        :season_number => episode["season_number"],
+        :still_path => episode["still_path"],
+        :vote_average => episode["vote_average"],
+        :vote_count => episode["vote_count"],
+      ).save()
+      return episode
+    end
+
+    return r
+  end
+
+  def updateTvLastEpisode(tv_id, episode_id)
+    r = TvLastEpisodeToAir.where("tv_id = :tv_id and tv_episode_id = :episode_id", { tv_id: tv_id, episode_id: episode_id }).take
+    if r.blank?
+      TvLastEpisodeToAir.new(:tv_id => tv_id, :tv_episode_id => episode_id).save()
+    end
+  end
+
   ################################################################
   #                       TMDB API Methods                       #
   ################################################################
@@ -289,7 +650,7 @@ namespace :crawler do
     return getRequestDataFromApi(createRequestUrl("/movie/#{movie_id}", {}))
   end
 
-  def getMoviePeoples(movie_id)
+  def getMoviePeople(movie_id)
     return getRequestDataFromApi(createRequestUrl("/movie/#{movie_id}/credits", {}))
   end
 
@@ -301,6 +662,34 @@ namespace :crawler do
     return getRequestDataFromApi(createRequestUrl("/person/#{person_id}", {}))
   end
 
+  def getTvDetails(tv_id)
+    return getRequestDataFromApi(createRequestUrl("/tv/#{tv_id}", {}))
+  end
+
+  def getNetworkDetails(network_id)
+    return getRequestDataFromApi(createRequestUrl("/network/#{network_id}", {}))
+  end
+
+  def getTvPeople(tv_id)
+    return getRequestDataFromApi(createRequestUrl("/tv/#{tv_id}/credits", {}))
+  end
+
+  def getTvSeasonDetails(tv_id, season_id)
+    return getRequestDataFromApi(createRequestUrl("/tv/#{tv_id}/season/#{season_id}", {}))
+  end
+
+  def getTvEpisodeDetails(tv_id, season_id, episode_id)
+    return getRequestDataFromApi(createRequestUrl("/tv/#{tv_id}/season/#{season_id}/episode/#{episode_id}", {}))
+  end
+
+  def getEpisodePeople(tv_id, season_id, episode_id)
+    return getRequestDataFromApi(createRequestUrl("/tv/#{tv_id}/season/#{season_id}/episode/#{episode_id}/credits", {}))
+  end
+
+  def getSeasonPeople(tv_id, season_id)
+    return getRequestDataFromApi(createRequestUrl("/tv/#{tv_id}/season/#{season_id}/credits", {}))
+  end
+  
   def search(type, keyword)
     if not ($allowSearchTypes.include? type)
       abort "allow type is #{$allowSearchTypes}"
@@ -317,8 +706,11 @@ namespace :crawler do
         crwalingMovies(results["results"])
       end
 
-      break
-      # break if (page >= results["total_pages"] || page >= 1000)
+      if type == "tv"
+        crwalingTvs(results["results"])
+      end
+
+      break if (page >= results["total_pages"] || page >= 1000)
       page += 1
     end
   end
