@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_20_000736) do
+ActiveRecord::Schema.define(version: 2019_03_20_185234) do
 
-  create_table "companies", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "companies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description"
@@ -23,13 +23,13 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.string "origin_country"
   end
 
-  create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "episode_run_times", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "episode_run_times", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_id"
     t.decimal "run_time", precision: 10
     t.datetime "created_at", null: false
@@ -37,20 +37,19 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_id"], name: "index_episode_run_times_on_tv_id"
   end
 
-  create_table "genres", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.decimal "type", precision: 10
   end
 
-  create_table "languages", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "languages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "movie_casts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "movie_casts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "movie_id"
@@ -61,7 +60,16 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["person_id"], name: "index_movie_casts_on_person_id"
   end
 
-  create_table "movie_countries", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "movie_companies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "movie_id"
+    t.bigint "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_movie_companies_on_company_id"
+    t.index ["movie_id"], name: "index_movie_companies_on_movie_id"
+  end
+
+  create_table "movie_countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "movie_id"
     t.bigint "country_id"
     t.datetime "created_at", null: false
@@ -70,7 +78,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["movie_id"], name: "index_movie_countries_on_movie_id"
   end
 
-  create_table "movie_crews", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "movie_crews", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "movie_id"
@@ -79,7 +87,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["person_id"], name: "index_movie_crews_on_person_id"
   end
 
-  create_table "movie_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "movie_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "movie_id"
@@ -88,7 +96,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["movie_id"], name: "index_movie_genres_on_movie_id"
   end
 
-  create_table "movie_languages", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "movie_languages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "movie_id"
     t.bigint "language_id"
     t.datetime "created_at", null: false
@@ -97,7 +105,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["movie_id"], name: "index_movie_languages_on_movie_id"
   end
 
-  create_table "movies", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "movies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "adult"
@@ -119,7 +127,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.decimal "vote_count", precision: 10
   end
 
-  create_table "networks", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "networks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "headquarters"
@@ -128,7 +136,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.string "origin_country"
   end
 
-  create_table "people", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "people", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "birthday"
@@ -145,7 +153,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.string "homepage"
   end
 
-  create_table "person_as_names", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "person_as_names", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "person_id"
@@ -153,7 +161,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["person_id"], name: "index_person_as_names_on_person_id"
   end
 
-  create_table "tv_casts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_casts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_id"
     t.bigint "person_id"
     t.datetime "created_at", null: false
@@ -164,7 +172,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_id"], name: "index_tv_casts_on_tv_id"
   end
 
-  create_table "tv_companies", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_companies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_id"
     t.bigint "company_id"
     t.datetime "created_at", null: false
@@ -173,7 +181,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_id"], name: "index_tv_companies_on_tv_id"
   end
 
-  create_table "tv_crews", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_crews", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_id"
     t.bigint "person_id"
     t.datetime "created_at", null: false
@@ -182,7 +190,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_id"], name: "index_tv_crews_on_tv_id"
   end
 
-  create_table "tv_episode_casts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_episode_casts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_episode_id"
     t.bigint "person_id"
     t.datetime "created_at", null: false
@@ -193,7 +201,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_episode_id"], name: "index_tv_episode_casts_on_tv_episode_id"
   end
 
-  create_table "tv_episode_crews", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_episode_crews", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_episode_id"
     t.bigint "person_id"
     t.datetime "created_at", null: false
@@ -202,7 +210,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_episode_id"], name: "index_tv_episode_crews_on_tv_episode_id"
   end
 
-  create_table "tv_episode_guests", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_episode_guests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_episode_id"
     t.bigint "person_id"
     t.datetime "created_at", null: false
@@ -213,7 +221,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_episode_id"], name: "index_tv_episode_guests_on_tv_episode_id"
   end
 
-  create_table "tv_episodes", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_episodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "air_date"
@@ -227,7 +235,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.decimal "vote_count", precision: 10
   end
 
-  create_table "tv_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "tv_id"
@@ -236,7 +244,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_id"], name: "index_tv_genres_on_tv_id"
   end
 
-  create_table "tv_last_episode_to_airs", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_last_episode_to_airs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_id"
     t.bigint "tv_episode_id"
     t.datetime "created_at", null: false
@@ -245,7 +253,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_id"], name: "index_tv_last_episode_to_airs_on_tv_id"
   end
 
-  create_table "tv_networks", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_networks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_id"
     t.bigint "network_id"
     t.datetime "created_at", null: false
@@ -254,7 +262,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_id"], name: "index_tv_networks_on_tv_id"
   end
 
-  create_table "tv_season_casts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_season_casts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_season_id"
     t.bigint "person_id"
     t.datetime "created_at", null: false
@@ -265,7 +273,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_season_id"], name: "index_tv_season_casts_on_tv_season_id"
   end
 
-  create_table "tv_season_crews", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_season_crews", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_season_id"
     t.bigint "person_id"
     t.datetime "created_at", null: false
@@ -274,7 +282,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_season_id"], name: "index_tv_season_crews_on_tv_season_id"
   end
 
-  create_table "tv_season_episodes", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_season_episodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_season_id"
     t.bigint "tv_episode_id"
     t.datetime "created_at", null: false
@@ -283,7 +291,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_season_id"], name: "index_tv_season_episodes_on_tv_season_id"
   end
 
-  create_table "tv_seasons", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_seasons", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "_id"
@@ -294,7 +302,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.decimal "season_number", precision: 10
   end
 
-  create_table "tv_with_seasons", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tv_with_seasons", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "tv_id"
     t.bigint "tv_season_id"
     t.datetime "created_at", null: false
@@ -303,7 +311,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
     t.index ["tv_season_id"], name: "index_tv_with_seasons_on_tv_season_id"
   end
 
-  create_table "tvs", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tvs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "backdrop_path"
@@ -329,6 +337,8 @@ ActiveRecord::Schema.define(version: 2019_03_20_000736) do
   add_foreign_key "episode_run_times", "tvs"
   add_foreign_key "movie_casts", "movies"
   add_foreign_key "movie_casts", "people"
+  add_foreign_key "movie_companies", "companies"
+  add_foreign_key "movie_companies", "movies"
   add_foreign_key "movie_countries", "countries"
   add_foreign_key "movie_countries", "movies"
   add_foreign_key "movie_crews", "movies"
