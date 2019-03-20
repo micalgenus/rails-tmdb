@@ -1,5 +1,15 @@
 # Rails TMDB
 
+## Docker run
+development:
+```
+$ docker-compose -f docker-compose.local.yml up
+```
+production:
+```
+$ docker-compose up
+```
+
 ## Requirement
 MySQL encoding: utf8mb4
 
