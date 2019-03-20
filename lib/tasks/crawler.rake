@@ -31,9 +31,12 @@ namespace :crawler do
   #                       Crwaling Methods                       #
   ################################################################
 
-  def crwalingMovies(movie_lists)
+  def crwalingMovies(movie_lists, now, total)
+    t = total > 1000 ? 1000 : total
     for movie in movie_lists
+      puts "movie crawling: #{now} / #{t}"
       crawlingMovie(movie["id"])
+      now += 1
     end
   end
 
@@ -108,9 +111,12 @@ namespace :crawler do
     end
   end
 
-  def crwalingTvs(tv_list)
+  def crwalingTvs(tv_list, now, total)
+    t = total > 1000 ? 1000 : total
     for tv in tv_list
+      puts "tv crawling: #{now} / #{t}"
       crwalingTv(tv["id"])
+      now += 1
     end
   end
 
@@ -702,12 +708,14 @@ namespace :crawler do
     page = 1
     loop do
       results = searchItems(type, { :query => keyword, :page => page })
+      now = ((results["total_results"].to_f / results["total_pages"]).ceil * (page - 1))
+      
       if type == "movie"
-        crwalingMovies(results["results"])
+        crwalingMovies(results["results"], now + 1, results["total_results"])
       end
 
       if type == "tv"
-        crwalingTvs(results["results"])
+        crwalingTvs(results["results"], now + 1, results["total_results"])
       end
 
       break if (page >= results["total_pages"] || page >= 1000)
