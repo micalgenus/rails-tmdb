@@ -1,3 +1,74 @@
-<h1>Search#movie</h1>
-<%= @books %>
-<p>Find me in app/views/search/movie.html.erb</p>
+<div class="ui grid">
+  <div class="six wide column">
+    <h2>Movies</h2>
+  </div>
+  <div class="ten wide column">
+    <%= form_tag('/search/movie', { :method => 'GET', :class => "ui form" }) do %>
+      <div class="field">
+        <div class="ui action input">
+          <%= text_field_tag('query', params[:query]) %>
+          <button class="ui button">Search</button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>제목</th>
+      <th>인기도</th>
+      <th>평점</th>
+      <th>배우</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @movies.each do |movie| %>
+      <% casts = movie.movie_cast %>
+      <tr>
+        <td data-label="No"><%= @no += 1 %></td>
+        <td data-label="Title"><%= movie["original_title"] %></td>
+        <td data-label="Average"><%= movie["popularity"] %></td>
+        <td data-label="Average"><%= movie["vote_average"] %></td>
+        <td data-label="Casts">
+          <% casts.each do |cast| %>
+            <ul>
+              <li>
+                <%= link_to cast.person["name"], controller:'search', action: 'people_detail', id: cast.person["id"] %>
+              </li>
+            </ul>
+          <% end %>
+        </td>
+      </tr>
+    <%end %>
+    
+    <% if @movies.blank? %>
+      <tr>
+        <td>검색 결과가 없습니다.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="ui pagination menu">
+  <% if @start != 1 %>
+    <%= link_to 1, search_movie_path(:page => 1, :query => params[:query]), :class => @page == 1 ? "item active" : "item" %>
+  <% end %>
+
+  <% if @start > 2 %>
+    <div class="disabled item">...</div>
+  <% end %>
+
+  <% for p in (@start..@end).to_a %>
+    <%= link_to p, search_movie_path(:page => p, :query => params[:query]), :class => @page == p ? "item active" : "item" %>
+  <% end %>
+  
+  <% if @end < @last - 1 %>
+    <div class="disabled item">...</div>
+  <% end %>
+
+  <% if @end != @last %>
+    <%= link_to @last, search_movie_path(:page => @last, :query => params[:query]), :class => @page == @last ? "item active" : "item" %>
+  <% end %>
+</div>
