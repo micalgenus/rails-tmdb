@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+chmod +x -R ./bin
+
 if [[ $1 == "development" ]]; then
   bundle install
   rails db:migrate
