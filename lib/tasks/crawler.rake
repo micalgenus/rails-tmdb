@@ -515,7 +515,7 @@ namespace :crawler do
         :id => person["id"],
         :name => person["name"],
         :gender => person["gender"],
-        :biography => person["biography"].strip,
+        :biography => person["biography"],
         :popularity => person["popularity"],
         :place_of_birth => person["place_of_birth"],
         :profile_path => person["profile_path"],
@@ -523,10 +523,12 @@ namespace :crawler do
         :homepage => person["homepage"]
       ).save()
 
-      for name in person["also_known_as"]
-        n = PersonAsName.where("name = :name and person_id = :person", { person: id, name: name }).take
-        if n.blank?
-          PersonAsName.new(:person_id => id, :name => name).save()
+      if not person["also_known_as"].blank?
+        for name in person["also_known_as"]
+          n = PersonAsName.where("name = :name and person_id = :person", { person: id, name: name }).take
+          if n.blank?
+            PersonAsName.new(:person_id => id, :name => name).save()
+          end
         end
       end
     end
