@@ -2,6 +2,7 @@
 
 ## Requirement
 MySQL encoding: utf8mb4
+
 .env:
 ```
 MYSQL_HOST=mysql
