@@ -17,9 +17,18 @@
   <thead>
     <tr>
       <th>#</th>
-      <th>제목</th>
-      <th>인기도</th>
-      <th>평점</th>
+      <th>
+        <%= link_to "제목", search_movie_path(page_params.merge(:sort => 'title', :order => toggleOrder)) %>
+        <%= displayOrderMovieAngle('title') %>
+      </th>
+      <th>
+        <%= link_to "인기도", search_movie_path(page_params.merge(:sort => 'popularity', :order => toggleOrder)) %>
+        <%= displayOrderMovieAngle('popularity') %>
+      </th>
+      <th>
+        <%= link_to "평점", search_movie_path(page_params.merge(:sort => 'vote_average', :order => toggleOrder)) %>
+        <%= displayOrderMovieAngle('vote_average') %>
+      </th>
       <th>배우</th>
     </tr>
   </thead>
@@ -29,7 +38,7 @@
       <tr>
         <td data-label="No"><%= @no += 1 %></td>
         <td data-label="Title"><%= movie["original_title"] %></td>
-        <td data-label="Average"><%= movie["popularity"] %></td>
+        <td data-label="Popularity"><%= movie["popularity"] %></td>
         <td data-label="Average"><%= movie["vote_average"] %></td>
         <td data-label="Casts">
           <% casts.each do |cast| %>
@@ -53,7 +62,7 @@
 
 <div class="ui pagination menu">
   <% if @start != 1 %>
-    <%= link_to 1, search_movie_path(:page => 1, :query => params[:query]), :class => @page == 1 ? "item active" : "item" %>
+    <%= link_to 1, search_movie_path(page_params.merge(:page => 1)), :class => @page == 1 ? "item active" : "item" %>
   <% end %>
 
   <% if @start > 2 %>
@@ -61,7 +70,7 @@
   <% end %>
 
   <% for p in (@start..@end).to_a %>
-    <%= link_to p, search_movie_path(:page => p, :query => params[:query]), :class => @page == p ? "item active" : "item" %>
+    <%= link_to p, search_movie_path(page_params.merge(:page => p)), :class => @page == p ? "item active" : "item" %>
   <% end %>
   
   <% if @end < @last - 1 %>
@@ -69,6 +78,6 @@
   <% end %>
 
   <% if @end != @last %>
-    <%= link_to @last, search_movie_path(:page => @last, :query => params[:query]), :class => @page == @last ? "item active" : "item" %>
+    <%= link_to @last, search_movie_path(page_params.merge(:page => @last)), :class => @page == @last ? "item active" : "item" %>
   <% end %>
 </div>

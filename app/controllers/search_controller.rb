@@ -5,6 +5,8 @@ class SearchController < ApplicationController
   def movie
     @page = params[:page].to_i > 0 ? params[:page].to_i : 1
     @no = (@page - 1) * PAGE_COUNT
+    sort = params[:sort] || 'title'
+    order = params[:order] == 'desc' ? :desc : :asc
 
     @movies = Movie
       .where(
@@ -13,6 +15,7 @@ class SearchController < ApplicationController
       )
       .left_outer_joins(movie_cast: :person)
       .group(:id)
+      .order({ sort => order })
       .limit(PAGE_COUNT).offset((@page - 1) * PAGE_COUNT)
 
     count = Movie.where(
@@ -26,7 +29,6 @@ class SearchController < ApplicationController
 
     @start = [1, @page - PAGINATION].max
     @end = [@last, @page + PAGINATION].min
-
   end
   
   def tv
