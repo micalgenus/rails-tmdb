@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root :to => 'search#movie'
+
   get 'search/people'
   get 'search/tv'
   get 'search/movie'
