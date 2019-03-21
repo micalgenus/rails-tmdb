@@ -442,6 +442,7 @@ namespace :crawler do
       Genre.find(id)
       # todo: update genre?
     rescue ActiveRecord::RecordNotFound
+      puts "  add genre: #{genre}"
       Genre.new(:id => id, :name => genre).save()
     end
   end
@@ -452,6 +453,7 @@ namespace :crawler do
       # todo: update company?
     rescue ActiveRecord::RecordNotFound
       company = getCompanyDetails(id)
+      puts "  add company: #{company["name"]}"
       Company.new(
         :id => company["id"],
         :description => company["description"],
@@ -467,6 +469,7 @@ namespace :crawler do
   def updateCountry(name)
     r = Country.where(:name => name).take
     if r.blank?
+      puts "  add country: #{name}"
       Country.new(:name => name).save()
     end
     # todo: update?
@@ -478,6 +481,7 @@ namespace :crawler do
       # todo: update movie?
     rescue ActiveRecord::RecordNotFound
       movie = getMovieDetails(id)
+      puts "  add movie: #{movie["original_title"]}"
       Movie.new(
         :adult => movie["adult"],
         :backdrop_path => movie["backdrop_path"],
@@ -508,6 +512,7 @@ namespace :crawler do
     rescue ActiveRecord::RecordNotFound
       # "also_known_as"=>[]
       person = getPerson(id)
+      puts "  add person: #{person["name"]}"
       Person.new(
         :birthday => person["birthday"],
         :known_for_department => person["known_for_department"],
@@ -537,6 +542,7 @@ namespace :crawler do
   def updateLanguage(name)
     r = Language.where(:name => name).take
     if r.blank?
+      puts "  add language: #{name}"
       Language.new(:name => name).save()
     end
     # todo: update?
@@ -549,6 +555,7 @@ namespace :crawler do
       # todo: update tv?
     rescue ActiveRecord::RecordNotFound
       tv = getTvDetails(id)
+      puts "  add tv: #{tv["name"]}"
       Tv.new(
         :backdrop_path => tv["backdrop_path"],
         :first_air_date => tv["first_air_date"],
@@ -587,6 +594,7 @@ namespace :crawler do
       # todo: update network?
     rescue ActiveRecord::RecordNotFound
       network = getNetworkDetails(id)
+      puts "  add network: #{network["name"]}"
       Network.new(
         :id => network["id"],
         :headquarters => network["headquarters"],
@@ -601,6 +609,7 @@ namespace :crawler do
     r = TvSeason.where("tv_id = :tv_id and season_number = :season_number", { tv_id: tv_id, season_number: season_id }).take
     if r.blank?
       season = getTvSeasonDetails(tv_id, season_id)
+      puts "  add TvSeason: #{season["name"]}"
       TvSeason.new(
         :tv_id => tv_id,
         :_id => season["_id"],
@@ -624,6 +633,7 @@ namespace :crawler do
     ).take
     if r.blank?
       episode = getTvEpisodeDetails(tv_id, season_id, episode_id)
+      puts "  add TvEpisode: #{episode["name"]}"
       TvEpisode.new(
         :tv_id => tv_id,
         :air_date => episode["air_date"],
