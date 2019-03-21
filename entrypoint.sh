@@ -15,8 +15,8 @@ elif [[ $1 == "production:test" ]]; then
   rails db:migrate
 
   rake crawler:movie[abcde]
-  rake crawler:tv[aaaa]
-  
+  rake crawler:tv[aaa]
+
   ./bin/rails server -e production
 else
   $*
