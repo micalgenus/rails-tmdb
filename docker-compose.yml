@@ -7,16 +7,10 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     links:
       - "mysql:mysql"
-      - "redis:redis"
     networks:
       - rails-tmdb
-    volumes:
-      - $PWD:/usr/local/share/rails-tmdb
-      - bundle:/usr/local/bundle
     tmpfs:
       - /usr/local/share/rails-tmdb/tmp
 
@@ -42,16 +36,6 @@ services:
         "--character-set-server=utf8mb4",
         "--collation-server=utf8mb4_unicode_ci",
       ]
-
-  redis:
-    image: "redis"
-    networks:
-      - rails-tmdb
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 2s
-      timeout: 20s
-      retries: 10
 
 networks:
   rails-tmdb:

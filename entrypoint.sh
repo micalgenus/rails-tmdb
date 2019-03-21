@@ -9,6 +9,7 @@ if [[ $1 == "development" ]]; then
 elif [[ $1 == "production" ]]; then
   bundle install
   rails db:migrate
+  rails assets:precompile
   ./bin/rails server -e production
 else
   $*
