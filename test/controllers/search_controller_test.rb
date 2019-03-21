@@ -6,4 +6,9 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get :id" do
+    get search_:id_url
+    assert_response :success
+  end
+
 end

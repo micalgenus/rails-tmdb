@@ -82,6 +82,8 @@ class SearchController < ApplicationController
   end
 
   def people_detail
+    @person = Person.where("`people`.`id` = :id", { :id => params[:id] }).left_outer_joins(:person_as_name).group(:id).take
+
     render template: "search/people.detail.html.erb"
   end
 end
