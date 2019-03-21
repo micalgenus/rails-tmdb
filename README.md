@@ -1,19 +1,30 @@
 # Rails TMDB
 
+## Requirement
+MySQL encoding: utf8mb4
+
 ## Docker run
 development:
 ```
 $ docker-compose -f docker-compose.local.yml up
 ```
+
 production:
 ```
 $ docker-compose up
 ```
 
-## Requirement
-MySQL encoding: utf8mb4
-
 ## Runner
+### Search (movies and tvs)
+```
+$ rake crawler:search[:keyword]
+```
+
+example:
+```
+$ rake crawler:search[simpson]
+```
+
 ### Search (movies)
 ```
 $ rake crawler:movie[:keyword]
