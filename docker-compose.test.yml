@@ -1,0 +1,42 @@
+version: "2.1"
+services:
+  web:
+    build: .
+    command: "production:test"
+    ports:
+      - "3000:3000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    links:
+      - "mysql:mysql"
+    networks:
+      - rails-tmdb
+    tmpfs:
+      - /usr/local/share/rails-tmdb/tmp
+
+  mysql:
+    image: "mysql:5.5"
+    environment:
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=rails_tmdb
+    networks:
+      - rails-tmdb
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: 'mysql -umysql -pmysql -e"SHOW DATABASES;"'
+      interval: 2s
+      timeout: 20s
+      retries: 10
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+      ]
+
+networks:
+  rails-tmdb:

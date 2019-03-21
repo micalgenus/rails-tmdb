@@ -9,7 +9,14 @@ if [[ $1 == "development" ]]; then
 elif [[ $1 == "production" ]]; then
   bundle install
   rails db:migrate
-  rails assets:precompile
+  ./bin/rails server -e production
+elif [[ $1 == "production:test" ]]; then
+  bundle install
+  rails db:migrate
+
+  rake crawler:movie[abcde]
+  rake crawler:tv[aaaa]
+  
   ./bin/rails server -e production
 else
   $*
