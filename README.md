@@ -2,6 +2,15 @@
 
 ## Requirement
 MySQL encoding: utf8mb4
+.env:
+```
+MYSQL_HOST=mysql
+MYSQL_USERNAME=mysql
+MYSQL_PASSWORD=mysql
+MYSQL_DATABASE=rails_tmdb
+
+TMDBAPI_KEY=#{TMDB_API_KEY}
+```
 
 ## Docker run
 development:
