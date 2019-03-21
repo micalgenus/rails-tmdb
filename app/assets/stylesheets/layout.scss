@@ -1,0 +1,43 @@
+$header-height: 60px;
+
+header {
+  z-index: 1;
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  height: $header-height;
+  display: flex !important;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+
+  & > div {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    h1 {
+      margin: 0;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: row;
+
+      li {
+        padding: 2px 5px;
+      }
+    }
+  }
+}
+
+main {
+  margin: $header-height 0;
+  padding-top: 20px;
+  width: 100%;
+  max-width: 1200px;
+}

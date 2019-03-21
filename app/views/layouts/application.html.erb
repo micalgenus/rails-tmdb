@@ -9,14 +9,26 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+    <!-- <link rel="stylesheet/less" type="text/css" href="/less/global.less" /> -->
+    <!-- <link rel="stylesheet/less" type="text/css" href="/less/layout.less" /> -->
   </head>
 
   <body>
     <header>
-      header
+      <div>
+        <h1><%= link_to "Search", root_path %></h1>
+        <ul>
+          <li><%= link_to "Movies", search_movie_path %></li>
+          <li><%= link_to "Tvs", search_tv_path %></li>
+          <li><%= link_to "People", search_people_path %></li>
+        </ul>
+      </div>
     </header>
-    <%= yield %>
+    <main>
+      <%= yield %>
+    </main>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <!-- <script defer src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script> -->
   </body>
 </html>
