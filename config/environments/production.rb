@@ -91,4 +91,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  Encoding::default_internal = Encoding::UTF_8
+  Encoding::default_external = Encoding::UTF_8
 end
