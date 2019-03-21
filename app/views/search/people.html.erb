@@ -1,2 +1,69 @@
-<h1>Search#people</h1>
-<p>Find me in app/views/search/people.html.erb</p>
+<div class="ui grid">
+  <div class="six wide column">
+    <h2>Movies</h2>
+  </div>
+  <div class="ten wide column">
+    <%= form_tag('/search/people', { :method => 'GET', :class => "ui form" }) do %>
+      <div class="field">
+        <div class="ui action input">
+          <%= text_field_tag('query', params[:query]) %>
+          <button class="ui button">Search</button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>
+        <%= link_to "이름", search_people_path(page_params.merge(:sort => 'name', :order => toggleOrder)) %>
+        <%= displayOrderPeopleAngle('name') %>
+      </th>
+      <th>
+        <%= link_to "인기도", search_people_path(page_params.merge(:sort => 'popularity', :order => toggleOrder)) %>
+        <%= displayOrderPeopleAngle('popularity') %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @people.each do |person| %>
+      <tr>
+        <td data-label="No"><%= @no += 1 %></td>
+        <td data-label="Name">
+          <%= link_to person["name"], controller:'search', action: 'people_detail', id: person["id"] %>
+        </td>
+        <td data-label="Popularity"><%= person["popularity"] %></td>
+      </tr>
+    <%end %>
+    
+    <% if @people.blank? %>
+      <tr>
+        <td>검색 결과가 없습니다.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="ui pagination menu">
+  <% if @start != 1 %>
+    <%= link_to 1, search_people_path(page_params.merge(:page => 1)), :class => @page == 1 ? "item active" : "item" %>
+  <% end %>
+
+  <% if @start > 2 %>
+    <div class="disabled item">...</div>
+  <% end %>
+
+  <% for p in (@start..@end).to_a %>
+    <%= link_to p, search_people_path(page_params.merge(:page => p)), :class => @page == p ? "item active" : "item" %>
+  <% end %>
+  
+  <% if @end < @last - 1 %>
+    <div class="disabled item">...</div>
+  <% end %>
+
+  <% if @end != @last %>
+    <%= link_to @last, search_people_path(page_params.merge(:page => @last)), :class => @page == @last ? "item active" : "item" %>
+  <% end %>
+</div>

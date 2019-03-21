@@ -11,6 +11,10 @@ module SearchHelper
     displayOrderAngle(name, 'title')
   end
 
+  def displayOrderPeopleAngle(name)
+    displayOrderAngle(name, 'name')
+  end
+
   def displayOrderAngle(name, default)
     sort = params[:sort] || default
     if sort == name

@@ -35,5 +35,31 @@ class SearchController < ApplicationController
   end
 
   def people
+    @page = params[:page].to_i > 0 ? params[:page].to_i : 1
+    @no = (@page - 1) * PAGE_COUNT
+    sort = params[:sort] || 'name'
+    order = params[:order] == 'desc' ? :desc : :asc
+
+    @people = Person
+      .where(
+        "name like :query",
+        { :query => "%#{params[:query]}%" }
+      )
+      .order({ sort => order })
+      .limit(PAGE_COUNT).offset((@page - 1) * PAGE_COUNT)
+
+    count = Person.where(
+      "name like :query",
+      { :query => "%#{params[:query]}%" }
+    ).length
+      
+    @last = [1, (count.to_f / PAGE_COUNT).ceil].max
+
+    @start = [1, @page - PAGINATION].max
+    @end = [@last, @page + PAGINATION].min
+  end
+
+  def people_detail
+    render template: "search/people.detail.html.erb"
   end
 end
