@@ -11,6 +11,10 @@ module SearchHelper
     displayOrderAngle(name, 'title')
   end
 
+  def displayOrderTvAngle(name)
+    displayOrderAngle(name, 'name')
+  end
+
   def displayOrderPeopleAngle(name)
     displayOrderAngle(name, 'name')
   end

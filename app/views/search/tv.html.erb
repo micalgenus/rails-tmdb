@@ -1,2 +1,83 @@
-<h1>Search#tv</h1>
-<p>Find me in app/views/search/tv.html.erb</p>
+<div class="ui grid">
+  <div class="six wide column">
+    <h2>TVs</h2>
+  </div>
+  <div class="ten wide column">
+    <%= form_tag('/search/movie', { :method => 'GET', :class => "ui form" }) do %>
+      <div class="field">
+        <div class="ui action input">
+          <%= text_field_tag('query', params[:query]) %>
+          <button class="ui button">Search</button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>
+        <%= link_to "제목", search_tv_path(page_params.merge(:sort => 'name', :order => toggleOrder)) %>
+        <%= displayOrderTvAngle('name') %>
+      </th>
+      <th>
+        <%= link_to "인기도", search_tv_path(page_params.merge(:sort => 'popularity', :order => toggleOrder)) %>
+        <%= displayOrderTvAngle('popularity') %>
+      </th>
+      <th>
+        <%= link_to "평점", search_tv_path(page_params.merge(:sort => 'vote_average', :order => toggleOrder)) %>
+        <%= displayOrderTvAngle('vote_average') %>
+      </th>
+      <th>배우</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tvs.each do |tv| %>
+      <% casts = tv.tv_cast %>
+      <tr>
+        <td data-label="No"><%= @no += 1 %></td>
+        <td data-label="Name"><%= tv["original_name"] %></td>
+        <td data-label="Popularity"><%= tv["popularity"] %></td>
+        <td data-label="Average"><%= tv["vote_average"] %></td>
+        <td data-label="Casts">
+          <% casts.each do |cast| %>
+            <ul>
+              <li>
+                <%= link_to cast.person["name"], controller:'search', action: 'people_detail', id: cast.person["id"] %>
+              </li>
+            </ul>
+          <% end %>
+        </td>
+      </tr>
+    <%end %>
+    
+    <% if @tvs.blank? %>
+      <tr>
+        <td>검색 결과가 없습니다.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="ui pagination menu">
+  <% if @start != 1 %>
+    <%= link_to 1, search_tv_path(page_params.merge(:page => 1)), :class => @page == 1 ? "item active" : "item" %>
+  <% end %>
+
+  <% if @start > 2 %>
+    <div class="disabled item">...</div>
+  <% end %>
+
+  <% for p in (@start..@end).to_a %>
+    <%= link_to p, search_tv_path(page_params.merge(:page => p)), :class => @page == p ? "item active" : "item" %>
+  <% end %>
+  
+  <% if @end < @last - 1 %>
+    <div class="disabled item">...</div>
+  <% end %>
+
+  <% if @end != @last %>
+    <%= link_to @last, search_tv_path(page_params.merge(:page => @last)), :class => @page == @last ? "item active" : "item" %>
+  <% end %>
+</div>
